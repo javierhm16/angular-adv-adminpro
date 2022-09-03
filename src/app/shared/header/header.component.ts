@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 
 declare let google: any;
@@ -10,7 +11,11 @@ declare let google: any;
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private userSvc: UserService) { }
+  user!: User;
+
+  constructor(private userSvc: UserService) {
+    this.user = userSvc.user;
+  }
 
   ngOnInit(): void {
   }
@@ -21,5 +26,7 @@ export class HeaderComponent implements OnInit {
       console.log('consent revoked');
     });
   }
+
+
 
 }

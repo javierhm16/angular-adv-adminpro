@@ -6,6 +6,7 @@ import { catchError, map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginForm } from '../interfaces/login-form.interface';
 import { RegisterForm } from '../interfaces/register-form.interface';
+import { User } from '../models/user.model';
 
 const base_url = environment.base_url;
 
@@ -13,6 +14,16 @@ const base_url = environment.base_url;
   providedIn: 'root'
 })
 export class UserService {
+
+  public user!: User;
+
+  get token(): string {
+    return localStorage.getItem('token') || '';
+  };
+
+  get uid(): string {
+    return this.user.uid || '';
+  }
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -26,6 +37,23 @@ export class UserService {
         )
 
       );;
+  }
+
+  updateUser(data: { name: string, email: string, role: string }) {
+    data = {
+      ...data,
+      role: this.user.rol || ''
+    }
+
+    return this.http.put(
+      `${base_url}/users/${this.uid}`,
+      data,
+      {
+        headers: {
+          'x-token': this.token
+        }
+      }
+    )
   }
 
   login(formData: any) {
@@ -53,20 +81,19 @@ export class UserService {
   }
 
   validateToken() {
-    const token = localStorage.getItem('token') || '';
-
     return this.http.get(
       `${base_url}/login/renew`,
       {
-        headers: { 'x-token': token }
+        headers: { 'x-token': this.token }
       }
     ).pipe(
-      tap(
+      map(
         (res: any) => {
+          this.user = new User(res.name, res.email, '', res.img, res.google, res.role, res.uid);
           localStorage.setItem('token', res.token);
+          return true;
         }
       ),
-      map(res => true),
       catchError(
         err => of(false)
       )
