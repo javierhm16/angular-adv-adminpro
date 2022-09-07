@@ -25,6 +25,14 @@ export class UserService {
     return this.user.uid || '';
   }
 
+  get headers() {
+    return {
+      headers: {
+        'x-token': this.token
+      }
+    };
+  }
+
   constructor(private http: HttpClient, private router: Router) { }
 
   createUser(formData: RegisterForm) {
@@ -42,17 +50,13 @@ export class UserService {
   updateUser(data: { name: string, email: string, role: string }) {
     data = {
       ...data,
-      role: this.user.rol || ''
-    }
+      role: this.user.role || ''
+    };
 
     return this.http.put(
       `${base_url}/users/${this.uid}`,
       data,
-      {
-        headers: {
-          'x-token': this.token
-        }
-      }
+      this.headers
     )
   }
 
@@ -103,6 +107,37 @@ export class UserService {
   logout() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/login');
+  }
+
+  loadUsers(from: number = 0) {
+    const url = `${base_url}/users?from=${from}`;
+    return this.http.get<{ total: number, user: User[] }>(url, this.headers)
+      .pipe(
+        map(
+          res => {
+            const users = res.user.map(
+              user => new User(user.name, user.email, '', user.img, user.google, user.role, user.uid)
+            );
+            return {
+              total: res.total,
+              users
+            };
+          }
+        )
+      )
+  }
+
+  deleteUser(user: User) {
+    const url = `${base_url}/users/${user.uid}`;
+    return this.http.delete(url, this.headers);
+  }
+
+  updateUser2(user: User) {
+    return this.http.put(
+      `${base_url}/users/${user.uid}`,
+      user,
+      this.headers
+    )
   }
 
 }

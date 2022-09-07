@@ -9,11 +9,15 @@ export class User {
         public password?: string,
         public img?: string,
         public google?: boolean,
-        public rol?: string,
+        public role?: string,
         public uid?: string
     ) { }
 
     get imageUrl() {
+        if (!this.img) {
+            return base_url + '/upload/users/no-image';
+        }
+
         if (this.img?.includes('https')) {
             return this.img;
         }

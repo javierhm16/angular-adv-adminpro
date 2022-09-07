@@ -5,13 +5,15 @@ import { NgChartsModule } from 'ng2-charts';
 
 import { IncrementadorComponent } from './incrementador/incrementador.component';
 import { DonaComponent } from './dona/dona.component';
+import { ModalImgComponent } from './modal-img/modal-img.component';
 
 
 
 @NgModule({
   declarations: [
     IncrementadorComponent,
-    DonaComponent
+    DonaComponent,
+    ModalImgComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ import { DonaComponent } from './dona/dona.component';
   ],
   exports: [
     IncrementadorComponent,
-    DonaComponent
+    DonaComponent,
+    ModalImgComponent
   ]
 })
 export class ComponentsModule { }
