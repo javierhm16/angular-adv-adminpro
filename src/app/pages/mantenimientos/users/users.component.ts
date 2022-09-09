@@ -67,7 +67,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     this.searchSvc.search('users', term).subscribe(
-      res => {
+      (res: User[]) => {
         this.users = res;
       }
     )
@@ -98,7 +98,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         )
       };
     })
-    return;
+    return true;
   }
 
   changeRole(user: User) {
