@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 
@@ -13,7 +14,7 @@ export class HeaderComponent implements OnInit {
 
   user!: User;
 
-  constructor(private userSvc: UserService) {
+  constructor(private userSvc: UserService, private router: Router) {
     this.user = userSvc.user;
   }
 
@@ -27,6 +28,12 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  search(terms: string) {
+    if (terms.length === 0) {
 
+    } else {
+      this.router.navigateByUrl(`dashboard/search/${terms}`)
+    }
+  }
 
 }

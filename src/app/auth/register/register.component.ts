@@ -14,11 +14,11 @@ export class RegisterComponent implements OnInit {
   public formSubmitted = false;
 
   public registerForm = this.fb.group({
-    name: ['Javier', Validators.required],
-    email: ['javi2@gmail.com', [Validators.required, Validators.email]],
-    password: ['123456', Validators.required],
-    password2: ['123456', Validators.required],
-    terms: [true, Validators.required],
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+    password2: ['', Validators.required],
+    terms: [false, Validators.required],
   }, {
     validators: this.samePasswords('password', 'password2')
   });

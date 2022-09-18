@@ -15,6 +15,8 @@ import { UsersComponent } from './mantenimientos/users/users.component';
 import { HospitalsComponent } from './mantenimientos/hospitals/hospitals.component';
 import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
 import { MedicoComponent } from './mantenimientos/medicos/medico/medico.component';
+import { SearchesComponent } from './searches/searches.component';
+import { AdminGuard } from '../guards/admin.guard';
 
 
 const routes: Routes = [
@@ -30,12 +32,15 @@ const routes: Routes = [
       { path: 'promesas', component: PromesasComponent, data: { title: 'Promesas' } },
       { path: 'rxjs', component: RxjsComponent, data: { title: 'Rxjs' } },
       { path: 'profile', component: ProfileComponent, data: { title: 'My Profile' } },
+      { path: 'search/:terms', component: SearchesComponent, data: { title: 'Searches' } },
 
       // Mantenimientos
-      { path: 'users', component: UsersComponent, data: { title: 'Users maintenance' } },
       { path: 'hospitals', component: HospitalsComponent, data: { title: 'Hospitals maintenance' } },
       { path: 'medicos', component: MedicosComponent, data: { title: 'Medicos maintenance' } },
       { path: 'medicos/:id', component: MedicoComponent, data: { title: 'Medicos maintenance' } },
+
+      // Admin routes
+      { path: 'users', canActivate: [AdminGuard], component: UsersComponent, data: { title: 'Users maintenance' } },
     ]
   },
 ]

@@ -33,14 +33,23 @@ export class UserService {
     };
   }
 
+  get role(): string {
+    return this.user.role;
+  }
+
   constructor(private http: HttpClient, private router: Router) { }
+
+  saveLocalStorage(token: string, menu: any) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('menu', JSON.stringify(menu));
+  }
 
   createUser(formData: RegisterForm) {
     return this.http.post(`${base_url}/users`, formData)
       .pipe(
         tap(
           (res: any) => {
-            localStorage.setItem('token', res.token);
+            this.saveLocalStorage(res.token, res.menu);
           }
         )
 
@@ -65,7 +74,7 @@ export class UserService {
       .pipe(
         tap(
           (res: any) => {
-            localStorage.setItem('token', res.token);
+            this.saveLocalStorage(res.token, res.menu);
           }
         )
 
@@ -77,7 +86,7 @@ export class UserService {
       .pipe(
         tap(
           (res: any) => {
-            localStorage.setItem('token', res.token);
+            this.saveLocalStorage(res.token, res.menu);
           }
         )
 
@@ -94,7 +103,7 @@ export class UserService {
       map(
         (res: any) => {
           this.user = new User(res.name, res.email, '', res.img, res.google, res.role, res.uid);
-          localStorage.setItem('token', res.token);
+          this.saveLocalStorage(res.token, res.menu);
           return true;
         }
       ),
@@ -106,6 +115,7 @@ export class UserService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
     this.router.navigateByUrl('/login');
   }
 
